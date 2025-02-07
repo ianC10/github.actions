@@ -1,28 +1,27 @@
-name: Daily Repository Update
+name: Daily Update
 
 on:
   schedule:
-    - cron: '17 14 * * *'  # Runs at 2:17 PM UTC daily
-  workflow_dispatch:  # Allows manual triggering
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
 
 jobs:
   update-repo:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GH_PAT }}
-    
-    - name: Set up Git
-      run: |
-        git config --global user.name 'DevSync Automation'
-        git config --global user.email '23f3001752@ds.study.iitm.ac.in'
-    
-    - name: Create Daily Update
-      run: |
-        echo "Daily repository update at $(date)" > daily_update.txt
-        git add daily_update.txt
-        git commit -m "Daily automated repository update"
-        git push
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}  # Use a Personal Access Token if needed
+
+      - name: Run Update Script
+        run: |
+          echo "Daily repository update at $(date)" > daily_update.txt
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "ianC10"  # Replace with your actual GitHub username
+          git config --global user.email "23f3001752@ds.study.iitm.ac.in"  # Replace with your email
+          git add daily_update.txt
+          git commit -m "Daily automated repository update"
+          git push origin main
